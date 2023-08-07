@@ -47,5 +47,5 @@ RUN apt-get update && apt-get install -y cuda
 RUN sed -i 's/tcl8.5/tcl8.6/g' /vmdpackaging/vmd-1.9.4a57/plugins/Make-arch
 RUN cp /vmdpackaging/vmd-1.9.4a57/edited/configure /vmdpackaging/vmd-1.9.4a57/vmd/configure
 RUN cp /vmdpackaging/vmd-1.9.4a57/edited/vmd.sh /vmdpackaging/vmd-1.9.4a57/vmd/bin/vmd.sh
-RUN cd /vmdpackaging/vmd-1.9.4a57; yes | debuild -d
+RUN cd /vmdpackaging/vmd-1.9.4a57; debuild
 RUN cd /vmdpackaging; sudo dpkg -i vmd-cuda_1.9.4a57-1_amd64.deb vmd-plugins_1.9.4a57-1_amd64.deb
