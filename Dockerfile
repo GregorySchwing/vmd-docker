@@ -13,7 +13,7 @@ RUN mv /vmdpackaging/vmd-1.9.4a57/vmd-1.9.4a57 /vmdpackaging/vmd-1.9.4a57/vmd
 RUN apt-get update && apt-get install -y git
 #Get the initial, not totally broken debian files.
 RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 init
-RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 remote add origin https://github.com/jvermaas/vmd-packaging-instructions.git
+RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 remote add origin https://github.com/GregorySchwing/vmd-packaging-instructions.git
 RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 fetch origin
 RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 --work-tree /vmdpackaging/vmd-1.9.4a57 checkout -b main --track origin/main
 RUN apt-get update && apt-get install -y surf=1.0-1 msms stride libactc actc-dev
