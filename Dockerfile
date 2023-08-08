@@ -58,7 +58,9 @@ RUN cp /vmdpackaging/vmd-1.9.4a57/edited/vmd.sh /vmdpackaging/vmd-1.9.4a57/vmd/b
 # Clone my copy of vmd
 RUN git clone https://github.com/GregorySchwing/vmd.git
 #RUN mv vmd/plugins /vmdpackaging/vmd-1.9.4a57/plugins
-RUN mv vmd/vmd-1.9.4a57/src /vmdpackaging/vmd-1.9.4a57/vmd/src
+RUN rm -frd /vmdpackaging/vmd-1.9.4a57/vmd/src
+RUN cp -frd /vmd/vmd-1.9.4a57/src /vmdpackaging/vmd-1.9.4a57/vmd/src
+RUN cp vmd/vmd-1.9.4a57/Makefile /vmdpackaging/vmd-1.9.4a57/vmd
 
 RUN cd /vmdpackaging/vmd-1.9.4a57; debuild -b
 RUN cd /vmdpackaging; sudo dpkg -i vmd_1.9.4a55-3_amd64.deb vmd-plugins_1.9.4a55-3_amd64.deb
