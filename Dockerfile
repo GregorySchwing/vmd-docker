@@ -28,13 +28,13 @@ RUN apt-get update && apt-get install -y libtachyon-mt-0-dev \
 					 sed
 					 
 RUN apt-get update && apt-get install -y wget
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-RUN dpkg -i cuda-keyring_1.0-1_all.deb
-RUN apt-get update && apt-get install -y cuda
+#RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
+#RUN dpkg -i cuda-keyring_1.0-1_all.deb
+#RUN apt-get update && apt-get install -y cuda
 
 #Clone VMD
-
-
+RUN cd
+RUN cd
 RUN mkdir vmdpackaging
 RUN wget --directory-prefix=/vmdpackaging https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.4/files/alpha/vmd-1.9.4a57.src.tar.gz
 RUN mv /vmdpackaging/vmd-1.9.4a57.src.tar.gz /vmdpackaging/vmd_1.9.4a57.orig.tar.gz
@@ -48,11 +48,12 @@ RUN tar -zxf /vmdpackaging/vmd_1.9.4a57.orig.tar.gz --directory /vmdpackaging/vm
 RUN mv /vmdpackaging/vmd-1.9.4a57/vmd-1.9.4a57 /vmdpackaging/vmd-1.9.4a57/vmd
 #Get the initial, not totally broken debian files.
 
+RUN cd
 RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 init
 RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 remote add origin https://github.com/GregorySchwing/vmd-packaging-instructions.git
 RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 fetch origin
-RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 --work-tree /vmdpackaging/vmd-1.9.4a57 checkout -b main --track origin/main
-RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 --work-tree /vmdpackaging/vmd-1.9.4a57 checkout 8e1fb095f1570824ac623695f6b76d623e0437c1
+RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 --work-tree /vmdpackaging/vmd-1.9.4a57 checkout -b main --track origin/cpu
+#RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 --work-tree /vmdpackaging/vmd-1.9.4a57 checkout 8e1fb095f1570824ac623695f6b76d623e0437c1
 
 #RUN mv vmd/plugins /vmdpackaging/vmd-1.9.4a57/plugins
 RUN cd vmd; git pull
@@ -63,9 +64,8 @@ RUN cp vmd/vmd-1.9.4a57/configure /vmdpackaging/vmd-1.9.4a57/vmd/configure
 
 RUN sed -i 's/tcl8.5/tcl8.6/g' /vmdpackaging/vmd-1.9.4a57/plugins/Make-arch
 RUN cp /vmdpackaging/vmd-1.9.4a57/edited/vmd.sh /vmdpackaging/vmd-1.9.4a57/vmd/bin/vmd.sh
-#RUN cp /vmdpackaging/vmd-1.9.4a57/edited/configure /vmdpackaging/vmd-1.9.4a57/vmd/configure
-RUN cd /vmdpackaging/vmd-1.9.4a57; yes | debuild; exit 0
-RUN cd /vmdpackaging; sudo dpkg -i vmd_1.9.4a55-3_amd64.deb vmd-plugins_1.9.4a55-3_amd64.deb
+RUN cd /vmdpackaging/vmd-1.9.4a57; yes | debuild -d; exit 0
+RUN cd /vmdpackaging; dpkg -i vmd_1.9.4a55-3_amd64.deb vmd-plugins_1.9.4a55-3_amd64.deb
 
 #RUN cd /vmdpackaging; sudo dpkg -i vmd-cuda_1.9.4a55-3_amd64.deb vmd-plugins_1.9.4a55-3_amd64.deb
 #RUN cd /vmdpackaging; sudo dpkg -i vmd-cuda_1.9.4a57-1_amd64.deb vmd-plugins_1.9.4a57-1_amd64.deb
