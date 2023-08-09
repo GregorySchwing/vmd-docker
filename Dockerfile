@@ -41,6 +41,9 @@ RUN mv /vmdpackaging/vmd-1.9.4a57.src.tar.gz /vmdpackaging/vmd_1.9.4a57.orig.tar
 RUN mkdir /vmdpackaging/vmd-1.9.4a57
 RUN apt-get update && apt-get install -y git
 
+# Clone my copy of vmd4
+RUN git clone https://github.com/GregorySchwing/vmd.git
+
 RUN tar -zxf /vmdpackaging/vmd_1.9.4a57.orig.tar.gz --directory /vmdpackaging/vmd-1.9.4a57
 RUN mv /vmdpackaging/vmd-1.9.4a57/vmd-1.9.4a57 /vmdpackaging/vmd-1.9.4a57/vmd
 #Get the initial, not totally broken debian files.
@@ -51,16 +54,15 @@ RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 fetch origin
 RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 --work-tree /vmdpackaging/vmd-1.9.4a57 checkout -b main --track origin/main
 RUN git --git-dir /vmdpackaging/vmd-1.9.4a57 --work-tree /vmdpackaging/vmd-1.9.4a57 checkout 8e1fb095f1570824ac623695f6b76d623e0437c1
 
-RUN sed -i 's/tcl8.5/tcl8.6/g' /vmdpackaging/vmd-1.9.4a57/plugins/Make-arch
-RUN cp /vmdpackaging/vmd-1.9.4a57/edited/configure /vmdpackaging/vmd-1.9.4a57/vmd/configure
-RUN cp /vmdpackaging/vmd-1.9.4a57/edited/vmd.sh /vmdpackaging/vmd-1.9.4a57/vmd/bin/vmd.sh
-
-# Clone my copy of vmd
-RUN git clone https://github.com/GregorySchwing/vmd.git
 #RUN mv vmd/plugins /vmdpackaging/vmd-1.9.4a57/plugins
+
 RUN rm -frd /vmdpackaging/vmd-1.9.4a57/vmd/src
 RUN cp -frd /vmd/vmd-1.9.4a57/src /vmdpackaging/vmd-1.9.4a57/vmd/src
 RUN cp vmd/vmd-1.9.4a57/Makefile /vmdpackaging/vmd-1.9.4a57/vmd
+RUN cp vmd/vmd-1.9.4a57/configure /vmdpackaging/vmd-1.9.4a57/vmd/configure
+
+RUN sed -i 's/tcl8.5/tcl8.6/g' /vmdpackaging/vmd-1.9.4a57/plugins/Make-arch
+RUN cp /vmdpackaging/vmd-1.9.4a57/edited/vmd.sh /vmdpackaging/vmd-1.9.4a57/vmd/bin/vmd.sh
 
 RUN cd /vmdpackaging/vmd-1.9.4a57; debuild -b
 RUN cd /vmdpackaging; sudo dpkg -i vmd_1.9.4a55-3_amd64.deb vmd-plugins_1.9.4a55-3_amd64.deb
